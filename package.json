@@ -5,8 +5,15 @@
 		"start": "next start"
 	},
 	"dependencies": {
+		"apicache": "^1.5.3",
+		"dotenv": "^8.2.0",
+		"isomorphic-unfetch": "^3.0.0",
 		"next": "^9.3.1",
 		"react": "^16.13.0",
 		"react-dom": "^16.13.0"
+	},
+	"devDependencies": {
+		"eslint": "^6.8.0",
+		"eslint-plugin-react": "^7.19.0"
 	}
 }
