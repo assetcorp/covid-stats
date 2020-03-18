@@ -4,10 +4,24 @@
 		"build": "next build",
 		"start": "next start"
 	},
+	"build": {
+		"env": {
+			"CRON_TOKEN": "@cron_token",
+			"MONGODB_URI": "@mongo_uri",
+			"DB_NAME": "@db_name",
+			"DB_COLLECTION_COUNTRIES": "@db_collection_countries",
+			"DB_COLLECTION_LATEST": "@db_collection_latest",
+			"DB_COLLECTION_CONFIRMED": "@db_collection_confirmed",
+			"DB_COLLECTION_DEATHS": "@db_collection_deaths",
+			"DB_COLLECTION_RECOVERED": "@db_collection_recovered"
+		}
+	},
 	"dependencies": {
 		"apicache": "^1.5.3",
 		"dotenv": "^8.2.0",
 		"isomorphic-unfetch": "^3.0.0",
+		"lodash": "^4.17.15",
+		"moment": "^2.24.0",
 		"mongodb": "^3.5.5",
 		"next": "^9.3.1",
 		"react": "^16.13.0",
