@@ -117,6 +117,7 @@ export const updateData = async ( req, res ) => {
 			}
 			// Save latest data
 			if ( allRecords.latest ) {
+				allRecords.latest.lastUpdated = new Date().toISOString()
 				const collection = await db.collection( CONFIG_VARIABLES.DB_COLLECTION_LATEST )
 				const dbDelete = await collection.deleteMany( {} )
 
