@@ -24,7 +24,7 @@ const connectToDatabase = async ( uri, dbName ) => {
 		cachedDb = db
 		return db
 	} catch ( error ) {
-		console.log( error, uri )
+		console.log( error )
 	}
 }
 

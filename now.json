@@ -1,0 +1,12 @@
+{
+	"env": {
+		"CRON_TOKEN": "@cron_token",
+		"MONGODB_URI": "@mongo_uri",
+		"DB_NAME": "@db_name",
+		"DB_COLLECTION_COUNTRIES": "@db_collection_countries",
+		"DB_COLLECTION_LATEST": "@db_collection_latest",
+		"DB_COLLECTION_CONFIRMED": "@db_collection_confirmed",
+		"DB_COLLECTION_DEATHS": "@db_collection_deaths",
+		"DB_COLLECTION_RECOVERED": "@db_collection_recovered"
+	}
+}
