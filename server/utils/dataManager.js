@@ -176,6 +176,23 @@ export const getAllDataFromDB = async () => {
 	}
 }
 
+export const getLatestDataFromDB = async () => {
+	try {
+		const db = await getDatabase( CONFIG_VARIABLES.DB_NAME )
+
+		// Get latest
+		const latestCollection = await db.collection( CONFIG_VARIABLES.DB_COLLECTION_LATEST )
+		const latestResults = await latestCollection.find( {}, { projection: { _id: 0 } } ).toArray()
+		if ( Array.isArray( latestResults ) )
+			return latestResults[0]
+		else throw latestResults
+
+	} catch ( error ) {
+		console.log( error )
+		return null
+	}
+}
+
 export const getCountryDataFromDB = async ( country_code = null ) => {
 	try {
 		const db = await getDatabase( CONFIG_VARIABLES.DB_NAME )

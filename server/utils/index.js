@@ -106,4 +106,5 @@ export const configureCache = () => {
 export const CacheGroups = {
 	ALL: 'all',
 	COUNTRIES: 'countries',
+	LATEST: 'latest',
 }

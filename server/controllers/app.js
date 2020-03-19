@@ -1,6 +1,6 @@
 import { buildResponse, genericErrorMessage, configureCache, CacheGroups, validateToken, CONFIG_VARIABLES } from '../utils'
 import apiCache from 'apicache'
-import { getUpdatedData, getAllDataFromDB, getCountryDataFromDB } from '../utils/dataManager'
+import { getUpdatedData, getAllDataFromDB, getCountryDataFromDB, getLatestDataFromDB } from '../utils/dataManager'
 import { getDatabase } from '../utils/db'
 
 const cache = apiCache.middleware
@@ -18,6 +18,29 @@ export const all = async ( req, res ) => {
 			if ( !allData ) throw allData
 
 			return res.status( 200 ).send( buildResponse( false, 200, '', allData ) )
+		} catch ( error ) {
+			// console.log( error )
+			let message = genericErrorMessage
+			let status = 500
+
+			return res.status( status ).send( buildResponse( true, status, message ) )
+		}
+	} )
+}
+
+export const latest = async ( req, res ) => {
+	// Configure API CACHE
+	configureCache()
+
+	cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
+		try {
+			req.apicacheGroup = CacheGroups.LATEST
+
+			const latestData = await getLatestDataFromDB()
+
+			if ( !latestData ) throw latestData
+
+			return res.status( 200 ).send( buildResponse( false, 200, '', latestData ) )
 		} catch ( error ) {
 			// console.log( error )
 			let message = genericErrorMessage
