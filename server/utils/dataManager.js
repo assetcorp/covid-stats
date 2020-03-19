@@ -171,6 +171,7 @@ export const getAllDataFromDB = async () => {
 
 		return result
 	} catch ( error ) {
+		console.log( error )
 		return null
 	}
 }

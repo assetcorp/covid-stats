@@ -15,6 +15,8 @@ export const all = async ( req, res ) => {
 
 			const allData = await getAllDataFromDB()
 
+			if ( !allData ) throw allData
+
 			return res.status( 200 ).send( buildResponse( false, 200, '', allData ) )
 		} catch ( error ) {
 			console.log( error )
