@@ -13,7 +13,7 @@ const connectToDatabase = async ( uri, dbName ) => {
 	if ( cachedDb ) return cachedDb
 
 	// If no connection is cached, create a new one
-	const client = await MongoClient.connect( encodeURI( uri ), { useNewUrlParser: true } )
+	const client = await MongoClient.connect( uri, { useNewUrlParser: true } )
 
 	// Select the database through the connection,
 	// using the database path of the connection string
