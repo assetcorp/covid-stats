@@ -53,7 +53,6 @@ export const latest = async ( req, res ) => {
 
 export const countryData = async ( req, res ) => {
 	try {
-		console.log( req.query )
 		if ( 'country_code' in req.query ) {
 			// Get data for specific country
 			const countryData = await getCountryDataFromDB( req.query.country_code )
@@ -76,7 +75,7 @@ export const countryData = async ( req, res ) => {
 			return res.status( 200 ).send( buildResponse( false, 200, '', countryData ) )
 		} )
 	} catch ( error ) {
-		console.log( error )
+		// console.log( error )
 		let message = genericErrorMessage
 		let status = 500
 
@@ -161,7 +160,7 @@ export const updateData = async ( req, res ) => {
 
 			return res.status( 200 ).send( buildResponse( false, 200, '', result ) )
 		} catch ( error ) {
-			console.log( error )
+			// console.log( error )
 			let message = 'Bad request'
 			let status = 400
 

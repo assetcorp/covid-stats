@@ -133,7 +133,7 @@ export const getUpdatedData = async () => {
 			}
 		}
 	} catch ( error ) {
-		console.log( error )
+		// console.log( error )
 		return null
 	}
 }
@@ -171,7 +171,7 @@ export const getAllDataFromDB = async () => {
 
 		return result
 	} catch ( error ) {
-		console.log( error )
+		// console.log( error )
 		return null
 	}
 }
@@ -188,7 +188,7 @@ export const getLatestDataFromDB = async () => {
 		else throw latestResults
 
 	} catch ( error ) {
-		console.log( error )
+		// console.log( error )
 		return null
 	}
 }
