@@ -26,8 +26,6 @@ export const all = async ( req, res ) => {
 			return res.status( status ).send( buildResponse( true, status, message ) )
 		}
 	} )
-
-	return res.status( 500 ).send( buildResponse( true, 500, genericErrorMessage ) )
 }
 
 export const countryData = async ( req, res ) => {
