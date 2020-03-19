@@ -19,7 +19,7 @@ export const all = async ( req, res ) => {
 
 			return res.status( 200 ).send( buildResponse( false, 200, '', allData ) )
 		} catch ( error ) {
-			console.log( error )
+			// console.log( error )
 			let message = genericErrorMessage
 			let status = 500
 
