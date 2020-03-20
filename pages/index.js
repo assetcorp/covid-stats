@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
 	Box, Typography, Container, Grid, Button, colors, ButtonBase, Card, CircularProgress
 } from '@material-ui/core'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import {
 	SentimentDissatisfiedOutlined as DissatisfiedIcon, SentimentSatisfiedOutlined as SatisfiedIcon,
 	SentimentVeryDissatisfiedOutlined as VeryDissatisfiedIcon
@@ -12,12 +12,11 @@ import {
 import { IMAGES } from '../src/components/media'
 // import fetch from 'isomorphic-unfetch'
 import { commaFy, environmentSettings } from '../src/utils'
-import clsx from 'clsx'
 import Link from 'next/link'
 import { getCovidLatestData } from '../src/redux/actions/AppActions'
 
 const Home = props => {
-	const theme = useTheme()
+	// const theme = useTheme()
 	const classes = useStyles()
 	const dispatch = useDispatch()
 

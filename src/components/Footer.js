@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles'
-import { Typography, Container, Link, Box } from '@material-ui/core'
+import { Typography, Container, Link } from '@material-ui/core'
 import { environmentSettings, isMobileApp, getPageFromAppPages } from '../utils'
 import { useSelector } from 'react-redux'
 // import NextLink from 'next/link'
@@ -56,7 +56,7 @@ const useStyles = makeStyles( theme => ( {
 		marginTop: 'auto',
 		[theme.breakpoints.up( 'sm' )]: {
 			width: props => ( props.accountDrawer ) ? `calc(100% - ${drawerWidth}px)` : '100%',
-			marginRight: props => ( props.accountDrawer ) ? drawerWidth : 0,
+			marginLeft: props => ( props.accountDrawer ) ? drawerWidth : 0,
 		},
 		backgroundColor: 'rgba(0, 0, 0, 0.43)',
 	},
