@@ -23,7 +23,7 @@ const App = props => {
 					text: {
 						default: '#fff',
 						primary: grey[200],
-						secondary: grey[400],
+						secondary: '#fff',
 					},
 					background: {
 						main: grey[700],

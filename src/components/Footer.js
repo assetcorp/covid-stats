@@ -56,7 +56,7 @@ const useStyles = makeStyles( theme => ( {
 		marginTop: 'auto',
 		[theme.breakpoints.up( 'sm' )]: {
 			width: props => ( props.accountDrawer ) ? `calc(100% - ${drawerWidth}px)` : '100%',
-			marginLeft: props => ( props.accountDrawer ) ? drawerWidth : 0,
+			marginRight: props => ( props.accountDrawer ) ? drawerWidth : 0,
 		},
 		backgroundColor: 'rgba(0, 0, 0, 0.43)',
 	},

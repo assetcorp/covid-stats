@@ -44,7 +44,7 @@ const Home = props => {
 		}
 	}, [props] )
 
-	const latestItems = [
+	let latestItems = [
 		{
 			name: 'Confirmed cases',
 			value: covidLatestDataLoading ? 'Loading...' : commaFy( covidLatestData.confirmed ) || 'N/A',
@@ -67,15 +67,20 @@ const Home = props => {
 			action: async () => {
 			}
 		},
-		{
+	]
+
+	if ( covidLatestData.confirmed && covidLatestData.recovered && covidLatestData.deaths ) {
+		const activeLatest = ( Number( covidLatestData.confirmed ) - ( Number( covidLatestData.recovered ) + Number( covidLatestData.deaths ) ) )
+
+		latestItems.push( {
 			name: 'Active',
-			value: covidLatestDataLoading ? 'Loading...' : commaFy( covidLatestData.deaths ) || 'N/A',
+			value: covidLatestDataLoading ? 'Loading...' : commaFy( activeLatest ) || 'N/A',
 			icon: DissatisfiedIcon,
 			iconColor: colors.orange[500],
 			action: async () => {
 			}
-		},
-	]
+		} )
+	}
 
 
 	return (
