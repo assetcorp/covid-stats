@@ -33,7 +33,7 @@ export const genericErrorMessage = 'Something went wrong. We are working to fix 
 export const buildErrorResponse = ( code = 500, message = genericErrorMessage ) =>
 	buildResponse( true, code, message, null )
 
-export const setDefaultResponse = ( res, code = 405, message = 'We cannot process this request' ) =>
+export const setDefaultResponse = ( res, code = 405, message = 'We cannot process this request. Visit https://github.com/delalify/covid-stats-api for more information.' ) =>
 	res.status( code ).json( buildErrorResponse( code, message ) )
 
 
