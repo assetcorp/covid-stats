@@ -19,6 +19,20 @@ export const getCountryData = async () => {
 	}
 }
 
+// Getting latest data from https://coronavirus-19-api.herokuapp.com/all
+export const getLatestData = async () => {
+	try {
+		const request = await fetch( SERVER_VARIABLES.COVID_LATEST_URL )
+
+		if ( request.status !== 200 ) throw request
+
+		apiCache.clear( CacheGroups.LATEST )
+		return await request.json()
+	} catch ( error ) {
+		return null
+	}
+}
+
 // Getting tracking information from https://coronavirus-tracker-api.herokuapp.com/all
 export const getTrackerData = async () => {
 	try {
@@ -60,18 +74,22 @@ export const getDataByCountry = ( confirmed, deaths, recovered ) => {
 			countryMap[countryName].confirmed += confirmedMap[mapKey].latest
 			countryMap[countryName].recovered += recoveredMap[mapKey].latest
 			countryMap[countryName].deaths += deathsMap[mapKey].latest
-			countryMap[countryName].confirmedByDay = addArr(
-				countryMap[countryName].confirmedByDay,
-				historyObjToArr( confirmedMap[mapKey].history )
-			)
-			countryMap[countryName].recoveredByDay = addArr(
-				countryMap[countryName].recoveredByDay,
-				historyObjToArr( recoveredMap[mapKey].history )
-			)
-			countryMap[countryName].deathsByDay = addArr(
-				countryMap[countryName].deathsByDay,
-				historyObjToArr( deathsMap[mapKey].history )
-			)
+
+			if ( mapKey.trim().toLowerCase() !== countryName.trim().toLowerCase() ) {
+				countryMap[countryName].confirmedByDay = addArr(
+					countryMap[countryName].confirmedByDay,
+					historyObjToArr( confirmedMap[mapKey].history )
+				)
+				countryMap[countryName].recoveredByDay = addArr(
+					countryMap[countryName].recoveredByDay,
+					historyObjToArr( recoveredMap[mapKey].history )
+				)
+				countryMap[countryName].deathsByDay = addArr(
+					countryMap[countryName].deathsByDay,
+					historyObjToArr( deathsMap[mapKey].history )
+				)
+			}
+
 		}
 	} )
 	const countryArr = extraStats(
@@ -112,28 +130,154 @@ const calActive = ( { confirmed, recovered, deaths } ) => confirmed - ( recovere
 const calMortalityPer = ( { confirmed, deaths } ) => ( ( deaths / confirmed ) * 100 ).toFixed( 2 )
 const calRecoveredPer = ( { confirmed, recovered } ) => ( ( recovered / confirmed ) * 100 ).toFixed( 2 )
 
+const validateFirstPointOfCountrySource = countryData => {
+	const newData = []
+
+	try {
+		if ( !Array.isArray( countryData ) ) return false
+
+		for ( let item of countryData ) {
+			if ( !( 'country' in item && 'cases' in item && 'todayCases' in item && 'deaths' in item &&
+				'todayDeaths' in item && 'recovered' in item && 'active' in item && 'critical' in item &&
+				'casesPerOneMillion' in item ) ) continue
+
+			newData.push( item )
+		}
+
+		return newData
+	} catch ( error ) {
+		return false
+	}
+}
+const validateFirstPointOfLatestSource = latestData => {
+
+	try {
+		if ( !latestData )
+			return false
+
+		if ( 'cases' in latestData && 'deaths' in latestData && 'recovered' in latestData ) return latestData
+		else return false
+
+	} catch ( error ) {
+		return false
+	}
+}
+
+const getCountryByCountryName = ( countryData, countryName = '' ) => {
+	try {
+		if ( !Array.isArray( countryData ) ) return false
+		const name = countryName.trim().toLowerCase()
+		for ( let item of countryData ) {
+			if ( item.country.trim().toLowerCase() === name ) {
+				return item
+			}
+		}
+		return null
+	} catch ( error ) {
+		return false
+	}
+}
+
 export const getUpdatedData = async () => {
 	try {
 		apiCache.clear()
-		// const countryData = await getCountryData()
+		const countryData = await getCountryData()
 		const trackerData = await getTrackerData()
+		const latestData = await getLatestData()
+		const validCountryData = validateFirstPointOfCountrySource( countryData )
+		const validLatestData = validateFirstPointOfLatestSource( latestData )
+		let globalCountryData = []
+		let confirmed = []
+		let deaths = []
+		let latest = {}
+		let recovered = []
+		let dataByCountry = []
 
 		if ( trackerData ) {
-			const confirmed = trackerData.confirmed
-			const deaths = trackerData.deaths
-			const latest = trackerData.latest
-			const recovered = trackerData.recovered
+			confirmed = trackerData.confirmed
+			deaths = trackerData.deaths
+			latest = trackerData.latest
+			recovered = trackerData.recovered
+			dataByCountry = getDataByCountry( confirmed, deaths, recovered )
+		}
 
-			// console.log( confirmed )
+		if ( validLatestData ) {
+			const newLatest = {
+				confirmed: validLatestData.cases,
+				recovered: validLatestData.recovered,
+				deaths: validLatestData.deaths,
+				active: ( Number( validLatestData.cases ) - ( Number( validLatestData.recovered ) + Number( validLatestData.deaths ) ) ),
+				lastUpdated: new Date().toISOString(),
+			}
+			console.log( newLatest )
+			latest = newLatest
+		}
 
-			const dataByCountry = getDataByCountry( confirmed, deaths, recovered )
+		console.log( latestData, latest )
 
-			return {
-				confirmed, deaths, latest, recovered, dataByCountry
+		if ( validCountryData ) {
+			for ( let item of validCountryData ) {
+				let newItem = {
+					confirmed: item.cases,
+					confirmedToday: item.todayCases,
+					recovered: item.recovered,
+					deaths: item.deaths,
+					deathsToday: item.todayDeaths,
+					country: item.country,
+					countryCode: item.country,
+					confirmedByDay: [],
+					recoveredByDay: [],
+					deathsByDay: [],
+					lastUpdated: new Date().toISOString(),
+					active: item.active,
+					critical: item.critical,
+					mortalityPer: ( ( Number( item.deaths ) / Number( item.cases ) ) * 100 ).toFixed( 2 ),
+					recoveredPer: ( ( Number( item.recovered ) / Number( item.cases ) ) * 100 ).toFixed( 2 )
+				}
+				const data = getCountryByCountryName( dataByCountry, item.country )
+				if ( data ) {
+					let confirmed = [...data.confirmedByDay]
+					let deaths = [...data.deathsByDay]
+
+					confirmed[confirmed.length - 1] = Number( confirmed[confirmed.length - 2] ) + Number( newItem.confirmedToday )
+					deaths[deaths.length - 1] = Number( deaths[deaths.length - 2] ) + Number( newItem.deathsToday )
+
+					newItem.countryCode = data.countryCode
+					newItem.confirmedByDay = confirmed
+					newItem.recoveredByDay = data.recoveredByDay
+					newItem.deathsByDay = deaths
+					newItem.lastUpdated = data.lastUpdated
+				}
+				globalCountryData.push( newItem )
+			}
+		} else {
+			for ( let item of dataByCountry ) {
+				let newItem = {
+					confirmed: item.confirmed,
+					confirmedToday: item.confirmedByDay[item.confirmedByDay.length - 1],
+					recovered: item.recovered,
+					deaths: item.deaths,
+					deathsToday: item.deathsByDay[item.deathsByDay.length - 1],
+					country: item.country,
+					countryCode: item.countryCode,
+					confirmedByDay: item.confirmedByDay,
+					recoveredByDay: item.recoveredByDay,
+					deathsByDay: item.deathsByDay,
+					lastUpdated: item.lastUpdated,
+					active: item.active,
+					critical: 'N/A',
+					mortalityPer: item.mortalityPer,
+					recoveredPer: item.recoveredPer
+				}
+				globalCountryData.push( newItem )
 			}
 		}
+
+		return {
+			confirmed, deaths, latest, recovered, dataByCountry: globalCountryData,
+		}
 	} catch ( error ) {
-		// console.log( error )
+		console.log( error )
 		return null
 	}
 }

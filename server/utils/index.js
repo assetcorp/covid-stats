@@ -80,6 +80,7 @@ export const validateToken = ( req, res ) => {
 
 export const SERVER_VARIABLES = {
 	COVID_COUNTRY_URL: 'https://coronavirus-19-api.herokuapp.com/countries',
+	COVID_LATEST_URL: 'https://coronavirus-19-api.herokuapp.com/all',
 	COVID_TRACKER_URL: 'https://coronavirus-tracker-api.herokuapp.com/all',
 }
 

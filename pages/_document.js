@@ -23,7 +23,7 @@ class MyDocument extends Document {
 	render() {
 		let appPage = getPageFromAppPages( pathname )
 
-		console.log( appPage )
+		// console.log( appPage )
 		return (
 			<Html>
 				<Head>

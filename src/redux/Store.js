@@ -15,11 +15,9 @@ const persistConfig = {
 	// Storage Method (Web)
 	storage: localforage,
 	// Whitelist (Save Specific Reducers)
-	whitelist: [
-		'AppReducer',
-	],
+	whitelist: [],
 	// Blacklist (Don't Save Specific Reducers)
-	blacklist: [],
+	blacklist: ['AppReducer'],
 	stateReconciler: autoMergeLevel2,
 }
 
