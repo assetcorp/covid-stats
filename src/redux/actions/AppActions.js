@@ -31,7 +31,7 @@ export const getCovidLatestData = () => async dispatch => {
 
 		if ( !result.response ) throw result
 
-		console.log( result )		
+		console.log( result )
 
 		dispatch( reduxActionDispatcher( ACTIONS.SET_COVID_LATEST_DATA, result.response ) )
 	} catch ( error ) {

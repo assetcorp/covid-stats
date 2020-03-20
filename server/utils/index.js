@@ -1,5 +1,6 @@
 import { config } from 'dotenv'
 import apiCache from 'apicache'
+import Cors from 'cors'
 
 // Configure environment variables
 config()
@@ -107,4 +108,28 @@ export const CacheGroups = {
 	ALL: 'all',
 	COUNTRIES: 'countries',
 	LATEST: 'latest',
+}
+
+// Helper method to wait for a middleware to execute before continuing
+// And to throw an error when an error happens in a middleware
+// https://nextjs.org/docs/api-routes/api-middlewares
+export const runMiddleware = ( req, res, fn ) => {
+	return new Promise( ( resolve, reject ) => {
+		fn( req, res, result => {
+			if ( result instanceof Error ) {
+				return reject( result )
+			}
+
+			return resolve( result )
+		} )
+	} )
+}
+
+export const runCors = async ( req, res ) => {
+	// Allow for all origins
+	const cors = Cors( {
+		methods: ['GET', 'HEAD'],
+	} )
+
+	await runMiddleware( req, res, cors )
 }

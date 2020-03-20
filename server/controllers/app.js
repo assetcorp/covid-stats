@@ -1,4 +1,4 @@
-import { buildResponse, genericErrorMessage, configureCache, CacheGroups, validateToken, CONFIG_VARIABLES } from '../utils'
+import { buildResponse, genericErrorMessage, configureCache, CacheGroups, validateToken, CONFIG_VARIABLES, runCors } from '../utils'
 import apiCache from 'apicache'
 import { getUpdatedData, getAllDataFromDB, getCountryDataFromDB, getLatestDataFromDB } from '../utils/dataManager'
 import { getDatabase } from '../utils/db'
@@ -8,6 +8,8 @@ const cache = apiCache.middleware
 export const all = async ( req, res ) => {
 	// Configure API CACHE
 	configureCache()
+
+	await runCors( req, res )
 
 	cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
 		try {
@@ -32,6 +34,8 @@ export const latest = async ( req, res ) => {
 	// Configure API CACHE
 	configureCache()
 
+	await runCors( req, res )
+
 	cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
 		try {
 			req.apicacheGroup = CacheGroups.LATEST
@@ -53,6 +57,9 @@ export const latest = async ( req, res ) => {
 
 export const countryData = async ( req, res ) => {
 	try {
+
+		await runCors( req, res )
+		
 		if ( 'country_code' in req.query ) {
 			// Get data for specific country
 			const countryData = await getCountryDataFromDB( req.query.country_code )

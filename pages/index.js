@@ -116,7 +116,7 @@ const Home = props => {
 													<Box className={classes.actionIcon}>
 														{
 															covidLatestDataLoading ?
-																<CircularProgress size='large' color={Item.iconColor} /> :
+																<CircularProgress size='large' style={{ color: Item.iconColor, backgroundColor: Item.iconColor }} /> :
 																<Item.icon size={36} style={{
 																	color: Item.iconColor,
 																	width: 36,

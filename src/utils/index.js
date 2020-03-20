@@ -40,8 +40,8 @@ export const commaFy = num => {
 }
 
 export const environmentSettings = {
-	API_URI: 'https://covid-stats-api.now.sh/api',
-	CLIENT_BASE_URL: 'https://covid.delalify.com/',
+	API_URI: isProduction ? 'https://covid-stats-api.now.sh/api' : 'http://localhost:3000/api',
+	CLIENT_BASE_URL: isProduction ? 'https://covid.delalify.com/' : 'http://localhost:3000/',
 	app: {
 		appName: 'COVID STATS',
 		appDescription: 'COVID STATS is an application that helps to inform and alert you on cases of Coronavirus (COVID-19) and their status.',
