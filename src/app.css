@@ -1,0 +1,57 @@
+html, body {
+	height: 100%;
+	min-height: 100%;
+	scrollbar-base-color: rgba(255, 255, 255, .43);
+	scrollbar-face-color: rgba(255, 255, 255, .43);
+	scrollbar-3dlight-color: rgba(255, 255, 255, .43);
+	scrollbar-highlight-color: rgba(255, 255, 255, .43);
+	scrollbar-track-color: rgba(255, 255, 255, .43);
+	scrollbar-arrow-color: rgba(255, 255, 255, .43);
+	scrollbar-shadow-color: rgba(255, 255, 255, .43);
+}
+
+a:link, a:visited {
+	text-decoration: none;
+	color: inherit;
+}
+
+a:hover, a:active {
+	text-decoration: none;
+	color: inherit;
+}
+
+::selection {
+	background-color: #2196f3;
+	color: #ffffff;
+}
+
+/* Scrollbar width */
+
+::-webkit-scrollbar {
+	width: 5px;
+	height: 5px;
+}
+
+/* Scrollbar Track */
+
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+/* Scrollbar Handle */
+
+::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, .43);
+	border-radius: 2.5px;
+}
+
+/* Scrollbar Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, .53);
+}
+
+#mainPages {
+	height: 100%;
+	min-height: 100%;
+}

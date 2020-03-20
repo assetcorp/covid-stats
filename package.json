@@ -4,6 +4,11 @@
 		"build": "next build",
 		"start": "next start"
 	},
+	"author": {
+		"name": "Delali Michael Azumah",
+		"email": "delali@delalify.com",
+		"url": "https://delali.com/"
+	},
 	"dependencies": {
 		"apicache": "^1.5.3",
 		"dotenv": "^8.2.0",
@@ -13,7 +18,30 @@
 		"mongodb": "^3.5.5",
 		"next": "^9.3.1",
 		"react": "^16.13.0",
-		"react-dom": "^16.13.0"
+		"react-dom": "^16.13.0",
+		"@material-ui/core": "^4.7.1",
+		"@material-ui/icons": "^4.5.1",
+		"@material-ui/lab": "^4.0.0-alpha.39",
+		"@react-pdf/renderer": "^1.6.8",
+		"@zeit/next-css": "^1.0.1",
+		"clsx": "^1.0.4",
+		"cors": "^2.8.5",
+		"localforage": "^1.7.3",
+		"next-seo": "^4.1.0",
+		"react-copy-to-clipboard": "^5.0.2",
+		"react-entypo": "^1.3.0",
+		"react-lottie": "^1.2.3",
+		"react-progressive-image": "^0.6.0",
+		"react-redux": "^7.1.3",
+		"react-share": "^4.0.1",
+		"react-swipeable-views": "^0.13.7",
+		"react-swipeable-views-utils": "^0.13.7",
+		"recharts": "^2.0.0-beta.1",
+		"redux": "^4.0.4",
+		"redux-devtools-extension": "^2.13.8",
+		"redux-persist": "^6.0.0",
+		"redux-thunk": "^2.3.0",
+		"rxjs": "^6.5.4"
 	},
 	"devDependencies": {
 		"eslint": "^6.8.0",
