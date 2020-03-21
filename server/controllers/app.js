@@ -59,7 +59,7 @@ export const countryData = async ( req, res ) => {
 	try {
 
 		await runCors( req, res )
-		
+
 		if ( 'country_code' in req.query ) {
 			// Get data for specific country
 			const countryData = await getCountryDataFromDB( req.query.country_code )
@@ -97,6 +97,7 @@ export const countryData = async ( req, res ) => {
 export const updateData = async ( req, res ) => {
 	if ( validateToken( req, res ) ) {
 		try {
+			apiCache.clear() // Clear entire cache
 			// Get records
 			const allRecords = await getUpdatedData()
 			if ( !allRecords ) throw allRecords
