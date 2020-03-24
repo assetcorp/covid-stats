@@ -214,7 +214,7 @@ export const getUpdatedData = async () => {
 				active: ( Number( validLatestData.cases ) - ( Number( validLatestData.recovered ) + Number( validLatestData.deaths ) ) ),
 				lastUpdated: new Date().toISOString(),
 			}
-			console.log( newLatest )
+			// console.log( newLatest )
 			latest = newLatest
 		}
 
