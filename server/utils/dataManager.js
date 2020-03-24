@@ -197,6 +197,7 @@ export const getUpdatedData = async () => {
 		let recovered = []
 		let dataByCountry = []
 
+
 		if ( trackerData ) {
 			confirmed = trackerData.confirmed
 			deaths = trackerData.deaths
