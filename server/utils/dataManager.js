@@ -54,11 +54,14 @@ export const getDataByCountry = ( confirmed, deaths, recovered ) => {
 	const confirmedMap = _.keyBy( confirmed.locations, ( i ) => i.country + i.province )
 	const recoveredMap = _.keyBy( recovered.locations, ( i ) => i.country + i.province )
 	const deathsMap = _.keyBy( deaths.locations, ( i ) => i.country + i.province )
+
 	confirmed.locations.forEach( obj => {
 		const countryName = obj.country
 		const provinceName = obj.province
 		const mapKey = countryName + provinceName
+
 		if ( !countryMap[countryName] ) {
+			if ( !confirmedMap[mapKey] || !recoveredMap[mapKey] || !deathsMap[mapKey] ) return
 			countryMap[countryName] = {
 				country: countryName,
 				countryCode: obj.country_code,
@@ -71,6 +74,7 @@ export const getDataByCountry = ( confirmed, deaths, recovered ) => {
 				lastUpdated,
 			}
 		} else {
+			if ( !confirmedMap[mapKey] || !recoveredMap[mapKey] || !deathsMap[mapKey] ) return
 			countryMap[countryName].confirmed += confirmedMap[mapKey].latest
 			countryMap[countryName].recovered += recoveredMap[mapKey].latest
 			countryMap[countryName].deaths += deathsMap[mapKey].latest
@@ -193,6 +197,7 @@ export const getUpdatedData = async () => {
 		let recovered = []
 		let dataByCountry = []
 
+
 		if ( trackerData ) {
 			confirmed = trackerData.confirmed
 			deaths = trackerData.deaths
@@ -212,8 +217,6 @@ export const getUpdatedData = async () => {
 			console.log( newLatest )
 			latest = newLatest
 		}
-
-		console.log( latestData, latest )
 
 		if ( validCountryData ) {
 			for ( let item of validCountryData ) {
