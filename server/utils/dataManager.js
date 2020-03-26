@@ -15,6 +15,7 @@ export const getCountryData = async () => {
 		apiCache.clear( CacheGroups.COUNTRIES )
 		return await request.json()
 	} catch ( error ) {
+		console.log( error )
 		return null
 	}
 }
@@ -29,6 +30,7 @@ export const getLatestData = async () => {
 		apiCache.clear( CacheGroups.LATEST )
 		return await request.json()
 	} catch ( error ) {
+		console.log( error )
 		return null
 	}
 }
@@ -43,6 +45,7 @@ export const getTrackerData = async () => {
 		apiCache.clear( CacheGroups.ALL )
 		return await request.json()
 	} catch ( error ) {
+		console.log( error )
 		return null
 	}
 }
@@ -150,6 +153,7 @@ const validateFirstPointOfCountrySource = countryData => {
 
 		return newData
 	} catch ( error ) {
+		console.log( error )
 		return false
 	}
 }
@@ -163,6 +167,7 @@ const validateFirstPointOfLatestSource = latestData => {
 		else return false
 
 	} catch ( error ) {
+		console.log( error )
 		return false
 	}
 }
@@ -178,6 +183,7 @@ const getCountryByCountryName = ( countryData, countryName = '' ) => {
 		}
 		return null
 	} catch ( error ) {
+		console.log( error )
 		return false
 	}
 }
@@ -318,7 +324,7 @@ export const getAllDataFromDB = async () => {
 
 		return result
 	} catch ( error ) {
-		// console.log( error )
+		console.log( error )
 		return null
 	}
 }
@@ -335,7 +341,7 @@ export const getLatestDataFromDB = async () => {
 		else throw latestResults
 
 	} catch ( error ) {
-		// console.log( error )
+		console.log( error )
 		return null
 	}
 }
@@ -356,6 +362,7 @@ export const getCountryDataFromDB = async ( country_code = null ) => {
 
 		return null
 	} catch ( error ) {
+		console.log( error )
 		return null
 	}
 }

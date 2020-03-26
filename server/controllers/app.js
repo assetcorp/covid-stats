@@ -117,9 +117,12 @@ export const updateData = async ( req, res ) => {
 				const collection = await db.collection( CONFIG_VARIABLES.DB_COLLECTION_COUNTRIES )
 				const dbDelete = await collection.deleteMany( {} )
 
-				if ( dbDelete ) {
+				console.log( 'Preparing country insert' )
+
+				if ( dbDelete && allRecords.dataByCountry.length > 0 ) {
 					const dbResponse = await collection.insertMany( allRecords.dataByCountry )
 					result.countries = dbResponse.result.ok === 1
+					console.log( 'After country insert' )
 				}
 			}
 			// Save latest data
@@ -128,9 +131,12 @@ export const updateData = async ( req, res ) => {
 				const collection = await db.collection( CONFIG_VARIABLES.DB_COLLECTION_LATEST )
 				const dbDelete = await collection.deleteMany( {} )
 
+				console.log( 'Preparing latest insert' )
+
 				if ( dbDelete ) {
 					const dbResponse = await collection.insertOne( allRecords.latest )
 					result.latest = dbResponse.result.ok === 1
+					console.log( 'After latest insert' )
 				}
 			}
 			// Save confirmed data
@@ -138,9 +144,12 @@ export const updateData = async ( req, res ) => {
 				const collection = await db.collection( CONFIG_VARIABLES.DB_COLLECTION_CONFIRMED )
 				const dbDelete = await collection.deleteMany( {} )
 
-				if ( dbDelete ) {
+				console.log( 'Preparing confirmed insert' )
+
+				if ( dbDelete && allRecords.confirmed.locations.length > 0 ) {
 					const dbResponse = await collection.insertMany( allRecords.confirmed.locations )
 					result.confirmed = dbResponse.result.ok === 1
+					console.log( 'After confirmed insert' )
 				}
 			}
 			// Save recovered data
@@ -148,9 +157,12 @@ export const updateData = async ( req, res ) => {
 				const collection = await db.collection( CONFIG_VARIABLES.DB_COLLECTION_RECOVERED )
 				const dbDelete = await collection.deleteMany( {} )
 
-				if ( dbDelete ) {
+				console.log( 'Preparing recovered insert', allRecords.recovered.locations.length )
+
+				if ( dbDelete && allRecords.recovered.locations.length > 0 ) {
 					const dbResponse = await collection.insertMany( allRecords.recovered.locations )
 					result.recovered = dbResponse.result.ok === 1
+					console.log( 'After recovered insert' )
 				}
 			}
 			// Save deaths data
@@ -158,9 +170,12 @@ export const updateData = async ( req, res ) => {
 				const collection = await db.collection( CONFIG_VARIABLES.DB_COLLECTION_DEATHS )
 				const dbDelete = await collection.deleteMany( {} )
 
-				if ( dbDelete ) {
+				console.log( 'Preparing deaths insert' )
+
+				if ( dbDelete && allRecords.deaths.locations.length > 0 ) {
 					const dbResponse = await collection.insertMany( allRecords.deaths.locations )
 					result.deaths = dbResponse.result.ok === 1
+					console.log( 'After deaths insert' )
 				}
 			}
 
@@ -168,7 +183,7 @@ export const updateData = async ( req, res ) => {
 
 			return res.status( 200 ).send( buildResponse( false, 200, '', result ) )
 		} catch ( error ) {
-			// console.log( error )
+			console.log( error )
 			let message = 'Bad request'
 			let status = 400
 
