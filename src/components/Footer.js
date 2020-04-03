@@ -39,7 +39,6 @@ const Footer = () => {
 	)
 }
 
-const drawerWidth = 240
 
 const useStyles = makeStyles( theme => ( {
 	'@global': {
@@ -54,10 +53,6 @@ const useStyles = makeStyles( theme => ( {
 	root: {
 		width: '100%',
 		marginTop: 'auto',
-		[theme.breakpoints.up( 'sm' )]: {
-			width: props => ( props.accountDrawer ) ? `calc(100% - ${drawerWidth}px)` : '100%',
-			marginRight: props => ( props.accountDrawer ) ? drawerWidth : 0,
-		},
 		backgroundColor: 'rgba(0, 0, 0, 0.43)',
 	},
 	footer: {

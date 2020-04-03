@@ -6,7 +6,6 @@ import WebApp from '../src/components/App'
 import GlobalActions from '../src/components/GlobalActions'
 import MainApp from '../src/components/MainApp'
 import Header from '../src/components/Header'
-import Drawer from '../src/components/Drawer'
 import Footer from '../src/components/Footer'
 // Redux
 import { Provider as StoreProvider } from 'react-redux'
@@ -34,7 +33,6 @@ class MyApp extends App {
 					<WebApp>
 						<GlobalActions />
 						<Header />
-						<Drawer />
 						<MainApp>
 							<Component {...pageProps} />
 						</MainApp>
