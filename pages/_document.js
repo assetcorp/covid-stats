@@ -51,43 +51,43 @@ class MyDocument extends Document {
 			<Html>
 				<Head>
 					<link rel='shortcut icon' href='/static/favicon.png' />
-					<NextSeo
-						title={appPage.title}
-						titleTemplate={`%s | ${environmentSettings.app.appName}`}
-						description={appPage.description}
-						canonical={`${environmentSettings.CLIENT_BASE_URL.replace( /\/$/, '' )}${pathname}`}
-						openGraph={{
-							url: `${environmentSettings.CLIENT_BASE_URL.replace( /\/$/, '' )}${pathname}`,
-							title: appPage.title,
-							description: appPage.description,
-							images: [
-								{
-									url: `${appPage.imagePath.startsWith( 'http' ) ? '' : environmentSettings.CLIENT_BASE_URL.replace( /\/$/, '' )}${appPage.imagePath}`,
-									width: 512,
-									height: 512,
-									alt: appPage.name,
-								},
-							],
-							defaultImageHeight: 512,
-							defaultImageWidth: 512,
-							site_name: environmentSettings.app.appName,
-						}}
-						twitter={{
-							handle: '@delalify',
-							site: '@delalify',
-							cardType: 'summary_large_image',
-						}}
-						additionalMetaTags={[{
-							property: 'keywords',
-							name: 'dc:keywords',
-							content: appPage.keywords
-						}, {
-							property: 'theme-color',
-							name: 'theme-color',
-							content: colors.deepOrange[500],
-						}]}
-					/>
 				</Head>
+				<NextSeo
+					title={appPage.title}
+					titleTemplate={`%s | ${environmentSettings.app.appName}`}
+					description={appPage.description}
+					canonical={`${environmentSettings.CLIENT_BASE_URL.replace( /\/$/, '' )}${pathname}`}
+					openGraph={{
+						url: `${environmentSettings.CLIENT_BASE_URL.replace( /\/$/, '' )}${pathname}`,
+						title: appPage.title,
+						description: appPage.description,
+						images: [
+							{
+								url: `${appPage.imagePath.startsWith( 'http' ) ? '' : environmentSettings.CLIENT_BASE_URL.replace( /\/$/, '' )}${appPage.imagePath}`,
+								width: 512,
+								height: 512,
+								alt: appPage.name,
+							},
+						],
+						defaultImageHeight: 512,
+						defaultImageWidth: 512,
+						site_name: environmentSettings.app.appName,
+					}}
+					twitter={{
+						handle: '@delalify',
+						site: '@delalify',
+						cardType: 'summary_large_image',
+					}}
+					additionalMetaTags={[{
+						property: 'keywords',
+						name: 'dc:keywords',
+						content: appPage.keywords
+					}, {
+						property: 'theme-color',
+						name: 'theme-color',
+						content: colors.deepOrange[500],
+					}]}
+				/>
 				<body>
 					<Main />
 					<NextScript />
