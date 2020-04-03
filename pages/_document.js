@@ -8,22 +8,45 @@ import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { environmentSettings, getPageFromAppPages } from '../src/utils'
 import { NextSeo } from 'next-seo'
 import { colors } from '@material-ui/core'
+import fetch from 'isomorphic-unfetch'
 
 let pathname = '/'
 let props = {}
+
+const handleGetLocation = async () => {
+	try {
+		const request = await fetch( 'http://ip-api.com/json' )
+		if ( request.status !== 200 ) throw request
+
+		const response = await request.json()
+		if ( !response.country ) throw response
+
+		return response.country
+
+	} catch ( error ) {
+		return false
+	}
+}
 class MyDocument extends Document {
 	static async getInitialProps( ctx ) {
 		const initialProps = await Document.getInitialProps( ctx )
 		pathname = ctx.asPath
 		// console.log( pathname, realPath, ctx.req )
-
+		const country = await handleGetLocation()
+		if ( country ) props.country = country
 		return { ...initialProps, ...props }
 	}
 
 	render() {
 		let appPage = getPageFromAppPages( pathname )
 
-		// console.log( appPage )
+		if ( props.country ) {
+			const description = appPage.description
+			const keywords = appPage.keywords
+			appPage.description = `${description} ${props.country} Live coronavirus data.`
+			appPage.keywords = `${props.country} ${keywords}`
+		}
+
 		return (
 			<Html>
 				<Head>
