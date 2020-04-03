@@ -40,8 +40,8 @@ export const commaFy = num => {
 }
 
 export const environmentSettings = {
-	// API_URI: isProduction ? 'https://covid.delalify.com/api' : 'http://localhost:3000/api',
-	API_URI: 'https://covid.delalify.com/api',
+	API_URI: isProduction ? 'https://covid.delalify.com/api' : 'http://localhost:3000/api',
+	// API_URI: 'https://covid.delalify.com/api',
 	CLIENT_BASE_URL: isProduction ? 'https://covid.delalify.com/' : 'http://localhost:3000/',
 	app: {
 		appName: 'COVID STATS',

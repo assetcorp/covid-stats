@@ -357,6 +357,7 @@ export const getCountryDataFromDB = async ( country_code = null ) => {
 		if ( country_code ) filters.countryCode = country_code
 
 		const results = await collection.find( filters, { projection: { _id: 0 } } ).toArray()
+		
 		if ( Array.isArray( results ) )
 			return results
 
