@@ -395,6 +395,10 @@ const Home = () => {
 	)
 }
 
+Home.getInitialProps = async () => {
+	return true
+}
+
 const useStyles = makeStyles( ( theme => ( {
 	root: {
 		display: 'flex',
