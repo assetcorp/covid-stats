@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
-
+import { initGA, logPageView } from '../utils/analytics'
 
 const MainApp = props => {
 
@@ -24,6 +24,14 @@ const MainApp = props => {
 	React.useEffect( () => {
 		setAccountDrawer( accountPlace )
 	}, [router.pathname] )
+
+	React.useEffect( () => {
+		if ( !window.GA_INITIALIZED ) {
+			initGA()
+			window.GA_INITIALIZED = true
+		}
+		logPageView()
+	}, [] )
 
 	return (
 		<main className={classes.container}>

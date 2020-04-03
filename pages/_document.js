@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-undef */
 /* eslint-disable indent */
 /* eslint-disable react/react-in-jsx-scope */
 // _document is only rendered on the server side and not on the client side
