@@ -59,13 +59,13 @@ const Home = () => {
 
 	const handleGetLocation = async () => {
 		try {
-			const request = await fetch( 'http://ip-api.com/json' )
+			const request = await fetch( 'https://api.ipdata.co/?api-key=9b1d4f5beaa5fabf10e98f7d64e3cb2c07eda6aedc4b0481b493e4b4' )
 			if ( request.status !== 200 ) throw request
 
 			const response = await request.json()
-			if ( !response.countryCode ) throw response
+			if ( !response.country_code ) throw response
 
-			const countryCode = response.countryCode
+			const countryCode = response.country_code
 
 			handleCountryData( countryCode )
 		} catch ( error ) {
