@@ -4,6 +4,13 @@ import { ThemeProvider, createMuiTheme, responsiveFontSizes } from '@material-ui
 import { grey, deepOrange } from '@material-ui/core/colors'
 import PropTypes from 'prop-types'
 
+const globalFont = {
+	fontFamily: 'Ubuntu',
+	fontStyle: 'normal',
+	fontDisplay: 'swap',
+	fontWeight: 400,
+}
+
 const App = props => {
 	// Configure Material-UI theme
 	const prefersDarkMode = useMediaQuery( '(prefers-color-scheme: dark)' )
@@ -32,7 +39,16 @@ const App = props => {
 						paper: 'rgba(0, 0, 0, 0.7)',
 					},
 				},
+				typography: {
+					fontFamily: 'Ubuntu',
+				},
+				shadows: Array( 25 ).fill( 'none' ),
 				overrides: {
+					MuiCssBaseline: {
+						'@global': {
+							'@font-face': [globalFont],
+						},
+					},
 					MuiAppBar: {
 						root: {
 							boxShadow: 'none'

@@ -1,5 +1,7 @@
 import * as ACTIONS from './ACTION_CREATORS'
 import { reduxActionDispatcher, genericErrorMessage, environmentSettings } from '../../utils'
+import moment from 'moment'
+import { logTiming, logException } from '../../utils/analytics'
 
 export const cleanAppStorage = () => {
 	return dispatch => {
@@ -24,7 +26,13 @@ export const toggleAppDrawer = status => dispatch => {
 export const getCovidLatestData = () => async dispatch => {
 	dispatch( reduxActionDispatcher( ACTIONS.SET_COVID_LATEST_DATA_LOADING, true ) )
 	try {
+		const startTime = moment()
 		const request = await fetch( `${environmentSettings.API_URI}/latest` )
+		const endTime = moment()
+		const fetchTime = moment.duration( moment( endTime ).diff( startTime ) ).asMilliseconds()
+
+		logTiming( 'fetch-resources', 'get-latest-data', fetchTime, 'Fetch latest data' )
+
 		if ( request.status !== 200 ) throw request
 
 		const result = await request.json()
@@ -36,12 +44,19 @@ export const getCovidLatestData = () => async dispatch => {
 		dispatch( reduxActionDispatcher( ACTIONS.SET_COVID_LATEST_DATA, result.response ) )
 	} catch ( error ) {
 		dispatch( reduxActionDispatcher( ACTIONS.SET_COVID_LATEST_DATA_ERROR, genericErrorMessage ) )
+		logException( 'Failed to get latest data', false )
 	}
 }
 export const getCovidCountryData = () => async dispatch => {
 	dispatch( reduxActionDispatcher( ACTIONS.SET_COVID_COUNTRY_DATA_LOADING, true ) )
 	try {
+		const startTime = moment()
 		const request = await fetch( `${environmentSettings.API_URI}/countries` )
+		const endTime = moment()
+		const fetchTime = moment.duration( moment( endTime ).diff( startTime ) ).asMilliseconds()
+
+		logTiming( 'fetch-resources', 'get-all-countries', fetchTime, 'Fetch all countries' )
+
 		if ( request.status !== 200 ) throw request
 
 		const result = await request.json()
@@ -52,6 +67,7 @@ export const getCovidCountryData = () => async dispatch => {
 	} catch ( error ) {
 		console.log( error )
 		dispatch( reduxActionDispatcher( ACTIONS.SET_COVID_COUNTRY_DATA_ERROR, genericErrorMessage ) )
+		logException( 'Failed to get all countries data', false )
 	}
 }
 export const getCovidGeneralData = () => async dispatch => {

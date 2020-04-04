@@ -13,10 +13,11 @@ import {
 	SearchOutlined, ViewColumnOutlined, RefreshOutlined, PersonAddOutlined as ConfirmedIcon, VerifiedUserOutlined as RecoveredIcon,
 	PersonAddDisabledOutlined as FatalityIcon, GroupOutlined as ActiveIcon
 } from '@material-ui/icons'
-import { commaFy, environmentSettings } from '../src/utils'
+import { commaFy, environmentSettings, hexToRGB } from '../src/utils'
 import { getCovidLatestData, getCovidCountryData } from '../src/redux/actions/AppActions'
 import MaterialTable from 'material-table'
 import moment from 'moment'
+import { logEvent, logException, logTiming } from '../src/utils/analytics'
 
 const tableIcons = {
 	Add: React.forwardRef( ( props, ref ) => <AddBoxOutlined {...props} ref={ref} /> ),
@@ -40,7 +41,6 @@ const tableIcons = {
 }
 
 const Home = () => {
-	// const theme = useTheme()
 	const classes = useStyles()
 	const dispatch = useDispatch()
 
@@ -56,10 +56,17 @@ const Home = () => {
 
 	// Component state
 	const [countryData, setCountryData] = React.useState( null )
+	const [startTime, setStartTime] = React.useState( moment() )
 
 	const handleGetLocation = async () => {
 		try {
+			const startTime = moment()
 			const request = await fetch( 'https://api.ipdata.co/?api-key=9b1d4f5beaa5fabf10e98f7d64e3cb2c07eda6aedc4b0481b493e4b4' )
+			const endTime = moment()
+			const fetchTime = moment.duration( moment( endTime ).diff( startTime ) ).asMilliseconds()
+
+			logTiming( 'fetch-resources', 'get-location-data', fetchTime, 'Fetch location data' )
+
 			if ( request.status !== 200 ) throw request
 
 			const response = await request.json()
@@ -69,6 +76,7 @@ const Home = () => {
 
 			handleCountryData( countryCode )
 		} catch ( error ) {
+			logException( 'Failed to get location data', false )
 			// Error
 		}
 	}
@@ -76,7 +84,13 @@ const Home = () => {
 	const handleCountryData = async countryCode => {
 		if ( countryCode ) {
 			try {
+				const startTime = moment()
 				const request = await fetch( `${environmentSettings.API_URI}/countries/${countryCode}` )
+				const endTime = moment()
+				const fetchTime = moment.duration( moment( endTime ).diff( startTime ) ).asMilliseconds()
+
+				logTiming( 'fetch-resources', 'get-single-country', fetchTime, 'Fetch single country' )
+
 				if ( request.status !== 200 ) throw request
 
 				const result = await request.json()
@@ -86,6 +100,7 @@ const Home = () => {
 				setCountryData( result.response )
 
 			} catch ( error ) {
+				logException( 'Failed to get single country data', false )
 				setCountryData( null )
 				// console.log( error )
 			}
@@ -102,10 +117,21 @@ const Home = () => {
 
 	React.useEffect( () => {
 		try {
+			setStartTime( moment() )
 			handleGetLocation()
 			dispatchGetCovidLatest()
 			dispatchGetCovidCountry()
+			logEvent( 'USER-INTERACTION', 'Waited for resources to initialize', 'The user has waited for all resources to start initializing' )
+
+			window.addEventListener( 'beforeunload', () => {
+				const duration = moment.duration( moment().diff( startTime ) ).asSeconds()
+
+				logEvent( 'USER-INTERACTION', `The user is leaving the page after ${duration} seconds`, `After ${duration} seconds, 
+				the user is leaving ${window.location.href}`, duration, true )
+			} )
+
 		} catch ( error ) {
+			logException( 'Something went wrong while initializing resources', false )
 			// Do nothing
 		}
 	}, [] )
@@ -142,14 +168,14 @@ const Home = () => {
 		}
 	]
 
-	console.log( countryData )
+	// console.log( countryData )
 	return (
 		<Box className={classes.root}>
 
 			<Box className={classes.sectionContainer} style={{ margin: '50px 0' }}>
 				<Container className={classes.descriptor}>
 					<Box className={classes.subDiscriptor}>
-						<Typography variant='h1' color="textSecondary" align="center" className={classes.title}>{environmentSettings.app.appName}</Typography>
+						<Typography variant='h1' color="textSecondary" align="center">{environmentSettings.app.appName}</Typography>
 						{
 							covidLatestData &&
 							<Typography variant="body1" align="center" style={{ margin: '40px 0 50px' }}>
@@ -162,6 +188,7 @@ const Home = () => {
 						<Grow in timeout={700}>
 							<ButtonBase className={classes.actionButtonCountry}>
 								<Card className={classes.actionsCardCountry}>
+									<Typography variant='h3' align="center" paragraph>{countryData.country}</Typography>
 									<Box className={classes.actionIconCountry}>
 										<img
 											style={{ width: 100, height: 100 }}
@@ -170,11 +197,44 @@ const Home = () => {
 										/>
 									</Box>
 									<Box className={classes.actionDetailsCountry}>
-										<Typography variant='h5'>{countryData.country}</Typography>
-										<Typography variant='body1'>Confirmed: {commaFy( countryData.confirmed )} {` | Today: ${commaFy( countryData.confirmedToday )}`}</Typography>
+										{/* <Typography variant='body1'>Confirmed: {commaFy( countryData.confirmed )} {` | Today: ${commaFy( countryData.confirmedToday )}`}</Typography>
 										<Typography variant='body1'>Recovered: {commaFy( countryData.recovered )} — {Number( countryData.recoveredPer )}%</Typography>
 										<Typography variant='body1'>Deaths: {commaFy( countryData.deaths )} — {Number( countryData.mortalityPer )}% {` | Today: ${commaFy( countryData.deathsToday )}`}</Typography>
-										<Typography variant='body1'>Active: {commaFy( countryData.active )}</Typography>
+										<Typography variant='body1'>Active: {commaFy( countryData.active )}</Typography> */}
+										<Box style={{ width: '100%', maxWidth: 600 }}>
+											<Box className={classes.detailsInner}>
+												<Typography variant='h6' style={{ color: blue[300] }}>Total confirmed: </Typography>
+												<Typography variant='h6' style={{ color: blue[300] }}>{commaFy( countryData.confirmed )}</Typography>
+											</Box>
+											<Box className={classes.detailsInner}>
+												<Typography variant='body1' style={{ color: blue[300] }}>Confirmed today: </Typography>
+												<Typography variant='body1' style={{ color: blue[300] }}>{commaFy( countryData.confirmedToday )}</Typography>
+											</Box>
+											<Box className={classes.detailsInner}>
+												<Typography variant='h6' style={{ color: green[300] }}>Total recovered: </Typography>
+												<Typography variant='h6' style={{ color: green[300] }}>{commaFy( countryData.recovered )}</Typography>
+											</Box>
+											<Box className={classes.detailsInner}>
+												<Typography variant='body1' style={{ color: green[300] }}>Recovered Rate: </Typography>
+												<Typography variant='body1' style={{ color: green[300] }}>{Number( countryData.recoveredPer )}%</Typography>
+											</Box>
+											<Box className={classes.detailsInner}>
+												<Typography variant='h6' style={{ color: red[300] }}>Total deaths: </Typography>
+												<Typography variant='h6' style={{ color: red[300] }}>{commaFy( countryData.deaths )}</Typography>
+											</Box>
+											<Box className={classes.detailsInner}>
+												<Typography variant='body1' style={{ color: red[300] }}>Death Rate: </Typography>
+												<Typography variant='body1' style={{ color: red[300] }}>{Number( countryData.mortalityPer )}%</Typography>
+											</Box>
+											<Box className={classes.detailsInner}>
+												<Typography variant='body1' style={{ color: red[300] }}>Deaths today: </Typography>
+												<Typography variant='body1' style={{ color: red[300] }}>{Number( countryData.deathsToday )}</Typography>
+											</Box>
+											<Box className={classes.detailsInner}>
+												<Typography variant='h6' style={{ color: orange[300] }}>Total Active: </Typography>
+												<Typography variant='h6' style={{ color: orange[300] }}>{commaFy( countryData.active )}</Typography>
+											</Box>
+										</Box>
 									</Box>
 								</Card>
 							</ButtonBase>
@@ -188,14 +248,18 @@ const Home = () => {
 										onClick={() => {
 											if ( Item.action && typeof Item.action === 'function' )
 												Item.action()
+
+											logEvent( 'USER-INTERACTION', `User clicked on ${Item.name} button`, `The user clicked on the ${Item.name} 
+											button that has a current value of ${Item.value}. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
+											after the user visited this ${window.location.href}`, moment.duration( moment().diff( startTime ) ).asSeconds() )
 										}}
 										TouchRippleProps={{
-											color: Item.itemColor,
+											color: Item.iconColor,
 										}}
 										style={{
 											width: '100%',
 										}}>
-										<Card className={classes.actionsCard}>
+										<Card className={classes.actionsCard} style={{ backgroundColor: hexToRGB( Item.iconColor, 0.24 ) }}>
 											<Box className={classes.actionDetails}>
 												<Typography variant='h5'>{Item.value}</Typography>
 												<Typography variant='body1'>{Item.name}</Typography>
@@ -264,12 +328,16 @@ const Home = () => {
 							onClick: async () => {
 								dispatchGetCovidCountry()
 								dispatchGetCovidLatest()
+
+								logEvent( 'USER-INTERACTION', 'User clicked on refresh button', `The user clicked on the refresh 
+											button. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
+											after the user visited this ${window.location.href}`, moment.duration( moment().diff( startTime ) ).asSeconds() )
 							},
 						},
 					]}
 					options={{
-						loadingType: 'linear',
-						pageSize: 20,
+						loadingType: 'overlay',
+						pageSize: ( covidCountryData.length === 0 || covidCountryDataLoading ) ? 5 : 20,
 						grouping: true,
 					}}
 					detailPanel={rowData => {
@@ -320,7 +388,12 @@ const Home = () => {
 							</Box>
 						)
 					}}
-					onRowClick={( event, rowData, togglePanel ) => togglePanel()}
+					onRowClick={( event, rowData, togglePanel ) => {
+						togglePanel()
+						logEvent( 'USER-INTERACTION', `User expanded the row for country '${rowData.country}'`, `The user expanded details for
+							the country ${rowData.country}. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
+							after the user visited this ${window.location.href}`, moment.duration( moment().diff( startTime ) ).asSeconds() )
+					}}
 				/>
 			</Container>
 
@@ -337,7 +410,7 @@ const Home = () => {
 							</Typography>
 							<Typography variant='body1' paragraph color='initial' align='left'>
 								We try our best to provide accurate and non-misleading data. We are always working hard to update our database with current data as and when we receive it.
-								Please note that, the intention of our mobile app is no to spread spam or malware, Our application is currently not accepted on the Google Play Store because Google trusts only leading organizations to provide accurate data.
+								Please note that, the intention of our mobile app is not to spread spam or malware, Our application is currently not accepted on the Google Play Store because Google trusts only leading organizations to provide accurate data.
 								We are working hard to ensure that, you are served with digital services that would inform you about the status of the virus and its effects.
 							</Typography>
 						</Box>
@@ -480,34 +553,30 @@ const useStyles = makeStyles( ( theme => ( {
 	actionButtonCountry: {
 		minHeight: 110,
 		display: 'flex',
-		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'center',
 		margin: '16px auto 50px',
 		width: '100%',
-		maxWidth: 600,
 	},
 	actionsCardCountry: {
 		display: 'flex',
-		flexDirection: 'row',
+		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'space-evenly',
+		justifyContent: 'center',
 		width: '100%',
-		minHeight: 110,
 		padding: theme.spacing( 1 ),
-		opacity: .73,
 	},
 	actionDetailsCountry: {
 		display: 'flex',
+		width: '100%',
 		flexDirection: 'column',
-		alignItems: 'flex-start',
-		justifyContent: 'flex-start'
+		alignItems: 'center',
+		justifyContent: 'center'
 	},
 	actionIconCountry: {
 		display: 'flex',
 		flexDirection: 'column',
-		width: 64,
-		marginHorizontal: theme.spacing( 2 ),
+		width: 100,
+		margin: theme.spacing( 0, 2 ),
 		alignItems: 'center',
 		justifyContent: 'center'
 	},

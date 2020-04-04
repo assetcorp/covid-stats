@@ -53,6 +53,7 @@ class MyDocument extends Document {
 			<Html>
 				<Head>
 					<link rel='shortcut icon' href='/static/favicon.png' />
+					<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:100,300,400,500,700&display=swap" />
 				</Head>
 				<NextSeo
 					title={appPage.title}
