@@ -8,5 +8,13 @@
 		"DB_COLLECTION_CONFIRMED": "@db_collection_confirmed",
 		"DB_COLLECTION_DEATHS": "@db_collection_deaths",
 		"DB_COLLECTION_RECOVERED": "@db_collection_recovered"
-	}
+	},
+	"headers": [
+		{
+			"source": "/api/*",
+			"headers": {
+				"cache-control": "no-cache"
+			}
+		}
+	]
 }
