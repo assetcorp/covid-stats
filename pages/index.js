@@ -57,6 +57,7 @@ const Home = () => {
 	// Component state
 	const [countryData, setCountryData] = React.useState( null )
 	const [startTime, setStartTime] = React.useState( moment() )
+	const [pageSize, setPageSize] = React.useState( 5 )
 
 	const handleGetLocation = async () => {
 		try {
@@ -115,18 +116,22 @@ const Home = () => {
 		return code
 	}
 
+	const handleRefresh = () => {
+		handleGetLocation()
+		dispatchGetCovidLatest()
+		dispatchGetCovidCountry()
+	}
+
 	React.useEffect( () => {
 		try {
 			setStartTime( moment() )
-			handleGetLocation()
-			dispatchGetCovidLatest()
-			dispatchGetCovidCountry()
+			handleRefresh()
 			logEvent( 'USER-INTERACTION', 'Waited for resources to initialize', 'The user has waited for all resources to start initializing' )
 
 			window.addEventListener( 'beforeunload', () => {
-				const duration = moment.duration( moment().diff( startTime ) ).asSeconds()
+				const duration = parseInt( moment.duration( moment().diff( startTime ) ).asSeconds() )
 
-				logEvent( 'USER-INTERACTION', `The user is leaving the page after ${duration} seconds`, `After ${duration} seconds, 
+				logEvent( 'USER-INTERACTION', 'User is leaving webpage', `The user is leaving the page after ${duration} seconds`, `After ${duration} seconds, 
 				the user is leaving ${window.location.href}`, duration, true )
 			} )
 
@@ -135,6 +140,11 @@ const Home = () => {
 			// Do nothing
 		}
 	}, [] )
+
+	React.useEffect( () => {
+		if ( covidCountryData.length === 0 || covidCountryDataLoading ) setPageSize( 5 )
+		else setPageSize( 20 )
+	}, [covidCountryData, covidCountryDataLoading] )
 
 	let latestItems = [
 		{
@@ -178,9 +188,20 @@ const Home = () => {
 						<Typography variant='h1' color="textSecondary" align="center">{environmentSettings.app.appName}</Typography>
 						{
 							covidLatestData &&
-							<Typography variant="body1" align="center" style={{ margin: '40px 0 50px' }}>
-								Last updated: {moment( covidLatestData.lastUpdated ).format( 'dddd Do MMMM, YYYY LT' )}
-							</Typography>
+							<Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+								<Typography variant="body1" align="center" style={{ margin: '16px 0' }}>
+									Last updated: {moment( covidLatestData.lastUpdated ).format( 'dddd Do MMMM, YYYY LT' )}
+								</Typography>
+								<Button disabled={covidCountryDataLoading || covidLatestDataLoading} variant="contained" color="primary"
+									onClick={() => {
+										handleRefresh()
+										logEvent( 'USER-INTERACTION', 'User performed a click action', `The user clicked on the general refresh
+											button. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
+											after the user visited this ${window.location.href}`, parseInt( moment.duration( moment().diff( startTime ) ).asSeconds() ) )
+									}} style={{ marginBottom: 16 }}>
+									Refresh
+								</Button>
+							</Box>
 						}
 					</Box>
 					{
@@ -249,9 +270,9 @@ const Home = () => {
 											if ( Item.action && typeof Item.action === 'function' )
 												Item.action()
 
-											logEvent( 'USER-INTERACTION', `User clicked on ${Item.name} button`, `The user clicked on the ${Item.name} 
-											button that has a current value of ${Item.value}. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
-											after the user visited this ${window.location.href}`, moment.duration( moment().diff( startTime ) ).asSeconds() )
+											logEvent( 'USER-INTERACTION', 'User performed a click action', `The user clicked on the ${Item.name} 
+												button that has a current value of ${Item.value}. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
+												after the user visited this ${window.location.href}`, parseInt( moment.duration( moment().diff( startTime ) ).asSeconds() ) )
 										}}
 										TouchRippleProps={{
 											color: Item.iconColor,
@@ -280,9 +301,6 @@ const Home = () => {
 								</Grid>
 							) )
 						}
-						<Grid xs={12} sm={6} className={classes.subDiscriptor} item>
-
-						</Grid>
 					</Grid>
 				</Container>
 			</Box>
@@ -329,15 +347,15 @@ const Home = () => {
 								dispatchGetCovidCountry()
 								dispatchGetCovidLatest()
 
-								logEvent( 'USER-INTERACTION', 'User clicked on refresh button', `The user clicked on the refresh 
-											button. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
-											after the user visited this ${window.location.href}`, moment.duration( moment().diff( startTime ) ).asSeconds() )
+								logEvent( 'USER-INTERACTION', 'User performed a click action', `The user clicked on the refresh 
+									button. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
+									after the user visited this ${window.location.href}`, parseInt( moment.duration( moment().diff( startTime ) ).asSeconds() ) )
 							},
 						},
 					]}
 					options={{
 						loadingType: 'overlay',
-						pageSize: ( covidCountryData.length === 0 || covidCountryDataLoading ) ? 5 : 20,
+						pageSize,
 						grouping: true,
 					}}
 					detailPanel={rowData => {
@@ -390,9 +408,9 @@ const Home = () => {
 					}}
 					onRowClick={( event, rowData, togglePanel ) => {
 						togglePanel()
-						logEvent( 'USER-INTERACTION', `User expanded the row for country '${rowData.country}'`, `The user expanded details for
+						logEvent( 'USER-INTERACTION', 'User performed a click action', `The user expanded details for
 							the country ${rowData.country}. The interaction is recorded ${moment.duration( moment().diff( startTime ) ).asSeconds()} seconds 
-							after the user visited this ${window.location.href}`, moment.duration( moment().diff( startTime ) ).asSeconds() )
+							after the user visited this ${window.location.href}`, parseInt( moment.duration( moment().diff( startTime ) ).asSeconds() ) )
 					}}
 				/>
 			</Container>
