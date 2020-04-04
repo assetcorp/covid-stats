@@ -10,10 +10,10 @@ The API URI endpoint for all routes is [https://covid.delalify.com/api/](https:/
 
 ```json
 {
-	"error": false,
-	"status": 200,
-	"message": "",
-	"response": {}
+ "error": false,
+ "status": 200,
+ "message": "",
+ "response": {}
 }
 ```
 
@@ -26,16 +26,16 @@ Send a `GET` request to [http://covid.delalify.com/api/latest](http://covid.dela
 `>> GET http://covid.delalify.com/api/latest`
 ```json
 {
-	"error": false,
-	"status": 200,
-	"message": "",
-	"response": {
-		"confirmed": 1196944,
-		"recovered": 246110,
-		"deaths": 64577,
-		"active": 886257,
-		"lastUpdated": "2020-04-04T22:07:08.204Z"
-	}
+ "error": false,
+ "status": 200,
+ "message": "",
+ "response": {
+    "confirmed": 1196944,
+    "recovered": 246110,
+    "deaths": 64577,
+    "active": 886257,
+    "lastUpdated": "2020-04-04T22:07:08.204Z"
+  }
 }
 ```
 
@@ -46,29 +46,28 @@ Send a `GET` request to [http://covid.delalify.com/api/countries](http://covid.d
 `>> GET http://covid.delalify.com/api/countries`
 ```json
 {
-	"error": false,
-	"status": 200,
-	"message": "",
-	"response": [
-		{
-			"confirmed": 309728,
-			"confirmedToday": 32567,
-			"recovered": 14741,
-			"deaths": 8441,
-			"deathsToday": 1037,
-			"country": "USA",
-			"countryCode": "USA",
-			"confirmedByDay": [],
-			"recoveredByDay": [],
-			"deathsByDay": [],
-			"lastUpdated": "2020-04-04T23:07:07.251Z",
-			"active": 286546,
-			"critical": 8206,
-			"mortalityPer": "2.73",
-			"recoveredPer": "4.76"
-		},
-		...
-	]
+ "error": false,
+ "status": 200,
+ "message": "",
+ "response": [
+    {
+      "confirmed": 309728,
+      "confirmedToday": 32567,
+      "recovered": 14741,
+      "deaths": 8441,
+      "deathsToday": 1037,
+      "country": "USA",
+      "countryCode": "USA",
+      "confirmedByDay": [],
+      "recoveredByDay": [],
+      "deathsByDay": [],
+      "lastUpdated": "2020-04-04T23:07:07.251Z",
+      "active": 286546,
+      "critical": 8206,
+      "mortalityPer": "2.73",
+      "recoveredPer": "4.76"
+    }
+  ]
 }
 ```
 
@@ -77,33 +76,30 @@ Send a `GET` request to [http://covid.delalify.com/api/countries/GH](http://covi
 You can obtain the country code from all countries data as described above.
 
 `>> GET http://covid.delalify.com/api/countries/GH`
+
 ```json
 {
-	"error": false,
-	"status": 200,
-	"message": "",
-	"response": {
-		"error": false,
-		"status": 200,
-		"message": "",
-		"response": {
-			"confirmed": 205,
-			"confirmedToday": 0,
-			"recovered": 31,
-			"deaths": 5,
-			"deathsToday": 0,
-			"country": "Ghana",
-			"countryCode": "GH",
-			"confirmedByDay": [],
-			"recoveredByDay": [],
-			"deathsByDay": [],
-			"lastUpdated": "2020-04-04T22:15:12.566968Z",
-			"active": 169,
-			"critical": 2,
-			"mortalityPer": "2.44",
-			"recoveredPer": "15.12"
-		}
-	}
+  "error": false,
+  "status": 200,
+  "message": "",
+  "response": {
+    "confirmed": 205,
+    "confirmedToday": 0,
+    "recovered": 31,
+    "deaths": 5,
+    "deathsToday": 0,
+    "country": "Ghana",
+    "countryCode": "GH",
+    "confirmedByDay": [],
+    "recoveredByDay": [],
+    "deathsByDay": [],
+    "lastUpdated": "2020-04-04T22:15:12.566968Z",
+    "active": 169,
+    "critical": 2,
+    "mortalityPer": "2.44",
+    "recoveredPer": "15.12"
+    }
+  }
 }
 ```
 
@@ -116,59 +112,56 @@ The data is grouped according to latest, confirmed, recovered, and deaths.
 `>> GET http://covid.delalify.com/api/general`
 ```json
 {
-	"error": false,
-	"status": 200,
-	"message": "",
-	"response": {
-		"latest": {
-			"confirmed": 1196944,
-			"recovered": 246110,
-			"deaths": 64577,
-			"active": 886257,
-			"lastUpdated": "2020-04-04T22:07:08.204Z"
-		},
-		"confirmed": [
-			{
-				"country": "Afghanistan",
-				"country_code": "AF",
-				"province": "",
-				"coordinates": {
-					"lat": "33.0",
-					"long": "65.0"
-				},
-				"history": {},
-				"latest": 281,
-			},
-			...
-		],
-		"recovered": [
-			{
-				"country": "Afghanistan",
-				"country_code": "AF",
-				"province": "",
-				"coordinates": {
-					"lat": "33.0",
-					"long": "65.0"
-				},
-				"history": {},
-				"latest": 10,
-			},
-			...
-		],
-		"deaths": [
-			{
-				"country": "Afghanistan",
-				"country_code": "AF",
-				"province": "",
-				"coordinates": {
-					"lat": "33.0",
-					"long": "65.0"
-				},
-				"history": {},
-				"latest": 6,
-			},
-			...
-		]
-	}
+ "error": false,
+ "status": 200,
+ "message": "",
+ "response": {
+    "latest": {
+      "confirmed": 1196944,
+      "recovered": 246110,
+      "deaths": 64577,
+      "active": 886257,
+      "lastUpdated": "2020-04-04T22:07:08.204Z"
+    },
+    "confirmed": [
+      {
+        "country": "Afghanistan",
+        "country_code": "AF",
+        "province": "",
+        "coordinates": {
+          "lat": "33.0",
+          "long": "65.0"
+        },
+        "history": {},
+        "latest": 281,
+      }
+    ],
+    "recovered": [
+      {
+        "country": "Afghanistan",
+        "country_code": "AF",
+        "province": "",
+        "coordinates": {
+          "lat": "33.0",
+          "long": "65.0"
+        },
+        "history": {},
+        "latest": 10,
+      }
+    ],
+    "deaths": [
+      {
+        "country": "Afghanistan",
+        "country_code": "AF",
+        "province": "",
+        "coordinates": {
+          "lat": "33.0",
+          "long": "65.0"
+        },
+        "history": {},
+        "latest": 6,
+      },
+    ]
+  }
 }
 ```
