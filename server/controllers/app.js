@@ -1,58 +1,58 @@
-import { buildResponse, genericErrorMessage, configureCache, CacheGroups, validateToken, CONFIG_VARIABLES, runCors } from '../utils'
+import { buildResponse, genericErrorMessage, CacheGroups, validateToken, CONFIG_VARIABLES, runCors } from '../utils'
 import apiCache from 'apicache'
 import { getUpdatedData, getAllDataFromDB, getCountryDataFromDB, getLatestDataFromDB } from '../utils/dataManager'
 import { getDatabase } from '../utils/db'
 
-const cache = apiCache.middleware
+// const cache = apiCache.middleware
 
 export const all = async ( req, res ) => {
 	// Configure API CACHE
-	configureCache()
+	// configureCache()
 
 	await runCors( req, res )
 
-	cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
-		try {
-			req.apicacheGroup = CacheGroups.ALL
+	// cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
+	try {
+		req.apicacheGroup = CacheGroups.ALL
 
-			const allData = await getAllDataFromDB()
+		const allData = await getAllDataFromDB()
 
-			if ( !allData ) throw allData
+		if ( !allData ) throw allData
 
-			return res.status( 200 ).send( buildResponse( false, 200, '', allData ) )
-		} catch ( error ) {
-			// console.log( error )
-			let message = genericErrorMessage
-			let status = 500
+		return res.status( 200 ).send( buildResponse( false, 200, '', allData ) )
+	} catch ( error ) {
+		// console.log( error )
+		let message = genericErrorMessage
+		let status = 500
 
-			return res.status( status ).send( buildResponse( true, status, message ) )
-		}
-	} )
+		return res.status( status ).send( buildResponse( true, status, message ) )
+	}
+	// } )
 }
 
 export const latest = async ( req, res ) => {
 	// Configure API CACHE
-	configureCache()
+	// configureCache()
 
 	await runCors( req, res )
 
-	cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
-		try {
-			req.apicacheGroup = CacheGroups.LATEST
+	// cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
+	try {
+		req.apicacheGroup = CacheGroups.LATEST
 
-			const latestData = await getLatestDataFromDB()
+		const latestData = await getLatestDataFromDB()
 
-			if ( !latestData ) throw latestData
+		if ( !latestData ) throw latestData
 
-			return res.status( 200 ).send( buildResponse( false, 200, '', latestData ) )
-		} catch ( error ) {
-			// console.log( error )
-			let message = genericErrorMessage
-			let status = 500
+		return res.status( 200 ).send( buildResponse( false, 200, '', latestData ) )
+	} catch ( error ) {
+		// console.log( error )
+		let message = genericErrorMessage
+		let status = 500
 
-			return res.status( status ).send( buildResponse( true, status, message ) )
-		}
-	} )
+		return res.status( status ).send( buildResponse( true, status, message ) )
+	}
+	// } )
 }
 
 export const countryData = async ( req, res ) => {
@@ -70,17 +70,17 @@ export const countryData = async ( req, res ) => {
 		}
 
 		// Configure API CACHE
-		configureCache()
-		cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
-			// Get all country data
-			req.apicacheGroup = CacheGroups.COUNTRIES
+		// configureCache()
+		// cache( '1 day', () => res.statusCode === 200 )( req, res, async () => {
+		// Get all country data
+		req.apicacheGroup = CacheGroups.COUNTRIES
 
-			const countryData = await getCountryDataFromDB()
+		const countryData = await getCountryDataFromDB()
 
-			if ( !countryData ) throw countryData
+		if ( !countryData ) throw countryData
 
-			return res.status( 200 ).send( buildResponse( false, 200, '', countryData ) )
-		} )
+		return res.status( 200 ).send( buildResponse( false, 200, '', countryData ) )
+		// } )
 	} catch ( error ) {
 		// console.log( error )
 		let message = genericErrorMessage
