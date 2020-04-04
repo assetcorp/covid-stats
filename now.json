@@ -9,9 +9,9 @@
 		"DB_COLLECTION_DEATHS": "@db_collection_deaths",
 		"DB_COLLECTION_RECOVERED": "@db_collection_recovered"
 	},
-	"headers": [
+	"routes": [
 		{
-			"source": "/api/*",
+			"src": "/api/*",
 			"headers": {
 				"cache-control": "no-cache"
 			}
