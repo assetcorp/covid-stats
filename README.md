@@ -165,3 +165,21 @@ The data is grouped according to latest, confirmed, recovered, and deaths.
   }
 }
 ```
+## API SOURCES
+
+There are 2 major API sources used in the project. The first is from @javieraviles [covidAPI](https://github.com/javieraviles/covidAPI). I rely on data from this project to provide information on all affected countries. The second source is from @ExpDev [coronavirus-tracker-api](https://github.com/ExpDev07/coronavirus-tracker-api). I use data from this project to handle location information for all affected places.
+
+I conjoin data from these sources to store them in a database. I update the database with the fetched data every hour to ensure that updates are served without too much delay.
+
+These 2 projects also pull data from one or more of the following sources:
+
+[World Health Organization (WHO)](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports)
+[Ghana Health Service](https://ghanahealthservice.org/covid19/)
+[China CDC (CCDC)](http://weekly.chinacdc.cn/news/TrackingtheEpidemic.htm)
+[US CDC](https://www.cdc.gov/coronavirus/2019-ncov/index.html)
+[Government of Canada](https://www.canada.ca/en/public-health/services/diseases/coronavirus.html)
+[Australia Government Department of Health](https://www.health.gov.au/news/coronavirus-update-at-a-glance)
+[European Centre for Disease Prevention and Control (ECDC)](https://www.moh.gov.sg/covid-19)
+[Italy Ministry of Health](http://www.salute.gov.it/nuovocoronavirus)
+[1Point3Arces](https://coronavirus.1point3acres.com/en)
+[WorldoMeters](https://www.worldometers.info/coronavirus/)
