@@ -147,6 +147,8 @@ const validateFirstPointOfCountrySource = countryData => {
 		return country.countryName.toLowerCase()
 	} )
 
+	// console.log( countryDataArray )
+
 	try {
 		if ( !Array.isArray( countryData ) ) return false
 
@@ -155,7 +157,7 @@ const validateFirstPointOfCountrySource = countryData => {
 				'todayDeaths' in item && 'recovered' in item && 'active' in item && 'critical' in item &&
 				'casesPerOneMillion' in item ) ) continue
 
-			if ( countryDataArray.indexOf( item.country ) !== -1 )
+			if ( countryDataArray.indexOf( item.country.toLowerCase() ) !== -1 )
 				newData.push( item )
 		}
 
