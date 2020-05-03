@@ -4,6 +4,7 @@ import apiCache from 'apicache'
 import _ from 'lodash'
 import moment from 'moment'
 import { getDatabase } from './db'
+import COUNTRY_REGIONS from '../../src/data/country_region.json'
 
 // Getting country data from https://coronavirus-19-api.herokuapp.com/countries
 export const getCountryData = async () => {
@@ -139,6 +140,12 @@ const calRecoveredPer = ( { confirmed, recovered } ) => ( ( recovered / confirme
 
 const validateFirstPointOfCountrySource = countryData => {
 	const newData = []
+	const countryDataArray = COUNTRY_REGIONS.filter( item => {
+		if ( !item.countryName || item.countryName === '' ) return false
+		return true
+	} ).map( country => {
+		return country.countryName.toLowerCase()
+	} )
 
 	try {
 		if ( !Array.isArray( countryData ) ) return false
@@ -148,7 +155,8 @@ const validateFirstPointOfCountrySource = countryData => {
 				'todayDeaths' in item && 'recovered' in item && 'active' in item && 'critical' in item &&
 				'casesPerOneMillion' in item ) ) continue
 
-			newData.push( item )
+			if ( countryDataArray.indexOf( item.country ) !== -1 )
+				newData.push( item )
 		}
 
 		return newData
@@ -357,9 +365,8 @@ export const getCountryDataFromDB = async ( country_code = null ) => {
 		if ( country_code ) filters.countryCode = country_code
 
 		const results = await collection.find( filters, { projection: { _id: 0 } } ).toArray()
-		
-		if ( Array.isArray( results ) )
-			return results
+
+		if ( Array.isArray( results ) ) return results
 
 		return null
 	} catch ( error ) {
